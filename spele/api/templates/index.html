@@ -2,18 +2,15 @@
 <html lang="lv">
 <head>
     <meta charset="UTF-8">
-    <title>UTG sakumlapa</title>
+    <title>UTG Sākumlapa</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>👾UNTITLED TETRIS GAME👾</h1>
+        <h1>👾 UNTITLED TETRIS GAME 👾</h1>
         <p>Laipni lūdzam oficiālajā Untitled Tetris Game spēles portālā!</p>
 
-
-
         <div class="btn-group">
-            <!-- Poga, kas palīdz palaist spēli lokāli -->
             <a href="tetris://" class="btn" onclick="alert('Lai sāktu spēli, lūdzu, palaidiet client/main.py savā datorā vai izmantojiet spēles aplikāciju!')">Palaist spēli (Klientu)</a>
             <a href="/rules" class="btn btn-secondary">Spēles noteikumi & Kā sākt</a>
         </div>
@@ -29,13 +26,20 @@
                 </tr>
             </thead>
             <tbody>
-                {% for entry in scores %}
-            <tr {% if loop.index == 1 %}style="color: gold; font-weight: bold;"{% endif %}>
-                 <td>{{ loop.index }}</td>
-                 <td>{{ entry.username }}</td>
-                  <td>{{ entry.score }}</td>
-                  <td>{{ entry.level }}</td>
-                {% endfor %}
+                {% if top_players %}
+                    {% for entry in top_players %}
+                    <tr {% if loop.index == 1 %}style="color: gold; font-weight: bold;"{% endif %}>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ entry.username }}</td>
+                        <td>{{ entry.score }}</td>
+                        <td>{{ entry.level }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4">Vēl nav saglabātu rezultātu!</td>
+                    </tr>
+                {% endif %}
             </tbody>
         </table>
     </div>

@@ -1,17 +1,19 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify
 import sqlite3
 import hashlib
 import jwt
 import datetime
+import os
+import json
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'tetris_secret_key_123'
 DB_PATH = "database.db"
+LOCAL_SCORES_FILE = "scores.json"
 
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    # Lietotāju tabula
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,7 +21,6 @@ def init_db():
             password TEXT NOT NULL
         )
     ''')
-    # Rezultātu tabula
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS scores (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,15 +35,44 @@ def init_db():
 
 init_db()
 
+def sync_json_to_db():
+    """Automātiski iebaro datus no scores.json uz SQLite datubāzi, ja tādi tur eksistē"""
+    if os.path.exists(LOCAL_SCORES_FILE):
+        try:
+            with open(LOCAL_SCORES_FILE, "r", encoding="utf-8") as f:
+                local_scores = json.load(f)
+                
+            conn = sqlite3.connect(DB_PATH)
+            cursor = conn.cursor()
+            for entry in local_scores:
+                uname = entry.get("username")
+                score = entry.get("score", 0)
+                level = entry.get("level", 1)
+                
+                # Pārbaudām vai šāds rezultāts jau eksistē, lai nepārtraukti nedublētu
+                cursor.execute(
+                    "SELECT id FROM scores WHERE username = ? AND score = ?", 
+                    (uname, score)
+                )
+                if not cursor.fetchone():
+                    cursor.execute(
+                        "INSERT INTO scores (username, score, level) VALUES (?, ?, ?)", 
+                        (uname, score, level)
+                    )
+            conn.commit()
+            conn.close()
+        except:
+            pass
+
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
-# HTML lapa ar līderu tabulu un iespēju palaist/uzzināt par spēli
 @app.route('/')
 def index():
+    sync_json_to_db() # Sinhronizē datus pirms parādīšanas
+    
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    # Izmantojam MAX(score), lai katrs spēlētājs parādītos tikai 1 reizi ar savu augstāko rezultātu
     cursor.execute('''
         SELECT username, MAX(score) as score, MAX(level) as level 
         FROM scores 
@@ -56,7 +86,10 @@ def index():
     top_players = [{"username": r[0], "score": r[1], "level": r[2]} for r in rows]
     return render_template('index.html', top_players=top_players)
 
-# API: Reģistrācija
+@app.route('/rules')
+def rules():
+    return render_template('rules.html')
+
 @app.route('/register', methods=['POST'])
 def register():
     data = request.json
@@ -72,14 +105,12 @@ def register():
         cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, hash_password(password)))
         conn.commit()
     except sqlite3.IntegrityError:
-        # Ja lietotājs jau eksistē, viss kārtībā, ignorējam kļūdu
         pass
     finally:
         conn.close()
         
     return jsonify({"message": "OK"})
 
-# API: Pieteikšanās (Login)
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
@@ -101,7 +132,6 @@ def login():
         
     return jsonify({"error": "Nederīgi dati"}), 401
 
-# API: Rezultātu saglabāšana
 @app.route('/scores', methods=['POST'])
 def post_score():
     data = request.json
@@ -120,9 +150,10 @@ def post_score():
     
     return jsonify({"message": "Rezultāts saglabāts"})
 
-# API: Datu saņemšana JSON formātā (klientam)
 @app.route('/api/scores', methods=['GET'])
 def api_scores():
+    sync_json_to_db() # Sinhronizē datus arī priekš klienta API
+    
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''

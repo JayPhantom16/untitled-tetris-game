@@ -35,33 +35,29 @@ def load_local_scores():
 def save_local_score(uname, score, level):
     scores = load_local_scores()
     
-    # Pārbaudām, vai šis spēlētājs jau ir sarakstā
-    existing_player = next((s for s in scores if s["username"] == uname), None)
-    
-    if existing_player:
-        # Ja jaunais rezultāts ir labāks, atjauninām to
-        if score > existing_player["score"]:
-            existing_player["score"] = score
-            existing_player["level"] = level
-    else:
-        # Ja spēlētāja vēl nav, pievienojam jaunu ierakstu
-        scores.append({"username": uname, "score": score, "level": level})
-        
-    # Sakārtojam dilstošā secībā pēc punktiem, saglabājam tikai labāko rezultātu katram un paturam TOP 10
-    scores = sorted(scores, key=lambda x: x["score"], reverse=True)
-    
-    unique_scores = []
-    seen_users = set()
-    for s in scores:
-        if s["username"] not in seen_users:
-            seen_users.add(s["username"])
-            unique_scores.append(s)
+    player_found = False
+    for entry in scores:
+        if entry["username"] == uname:
+            player_found = True
+            if score > entry["score"]:
+                entry["score"] = score
+                entry["level"] = level
+            break
             
-    unique_scores = unique_scores[:10]
+    if not player_found:
+        scores.append({"username": uname, "score": score, "level": level})
+    
+    unique_scores = {}
+    for s in scores:
+        uname_key = s["username"]
+        if uname_key not in unique_scores or s["score"] > unique_scores[uname_key]["score"]:
+            unique_scores[uname_key] = s
+            
+    scores = sorted(list(unique_scores.values()), key=lambda x: x["score"], reverse=True)[:10]
     
     try:
         with open(LOCAL_SCORES_FILE, "w", encoding="utf-8") as f:
-            json.dump(unique_scores, f, ensure_ascii=False, indent=4)
+            json.dump(scores, f, ensure_ascii=False, indent=4)
     except:
         pass
 
@@ -72,21 +68,11 @@ def fetch_leaderboard():
         if res.status_code == 200:
             server_scores = res.json()
             if server_scores:
-                # Apstrādājam servera datus, lai katrs spēlētājs būtu tikai 1 reizi
-                unique_dict = {}
-                for entry in server_scores:
-                    uname = entry.get("username")
-                    score = entry.get("score", 0)
-                    if uname not in unique_dict or score > unique_dict[uname]["score"]:
-                        unique_dict[uname] = entry
-                
-                sorted_scores = sorted(unique_dict.values(), key=lambda x: x["score"], reverse=True)
-                leaderboard_data = sorted_scores[:10]
+                leaderboard_data = sorted(server_scores, key=lambda x: x["score"], reverse=True)[:10]
                 return
     except:
         pass
     
-    # Ja serveris nav pieejams, ņemam datus no lokālā faila
     leaderboard_data = load_local_scores()
     if not leaderboard_data:
         leaderboard_data = [{"username": "Nav datu", "score": 0, "level": 1}]
@@ -110,6 +96,9 @@ while running:
                     fetch_leaderboard()
                     state = 'in_game_leaderboard'
                 elif event.key == pygame.K_3:
+                    # Atvērt vietni no galvenās izvēlnes
+                    webbrowser.open(BASE_URL)
+                elif event.key == pygame.K_4:
                     running = False
                     
         elif state == 'in_game_leaderboard':
@@ -155,27 +144,28 @@ while running:
                     game.rotate_piece()
                     
         elif state == 'pause':
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
-                state = 'game'
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    state = 'game'  # Atgriezties spēlē
+                elif event.key == pygame.K_m or event.key == pygame.K_b:
+                    state = 'menu'  # Atgriezties galvenajā izvēlnē
+                elif event.key == pygame.K_q:
+                    running = False # Iziet no spēles pilnībā
+                elif event.key == pygame.K_l:
+                    webbrowser.open(BASE_URL) # Atvērt vietni arī pauzes laikā, ja vajag
                 
         elif state == 'game_over':
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
-                    # 1. Spēlēt no jauna
                     state = 'game'
                     game = TetrisGame()
                 elif event.key == pygame.K_2:
-                    # 2. Paskatīties līderu tabulu
                     fetch_leaderboard()
                     state = 'in_game_leaderboard'
                 elif event.key == pygame.K_3:
-                    # 3. Atvērt vietni (Browser)
                     webbrowser.open(BASE_URL)
-                elif event.key == pygame.K_4:
-                    # 4. Atgriezties galvenajā izvēlnē
+                elif event.key == pygame.K_b:
                     state = 'menu'
-                    username = ""
-                    game = TetrisGame()
 
     # Spēles loģika
     if state == 'game':
@@ -208,10 +198,11 @@ while running:
     screen.fill((30, 30, 30))
 
     if state == 'menu':
-        draw_text("ULTIMATE TETRIS GAME", 50, 150, (255, 255, 255), 26)
-        draw_text("1: Sākt spēli", 50, 220, (0, 255, 204), 24)
-        draw_text("2: Līderu tabula", 50, 260, (255, 215, 0), 24)
-        draw_text("3: Iziet", 50, 300, (200, 100, 100), 24)
+        draw_text("UNTITLED TETRIS GAME", 45, 130, (255, 255, 255), 26)
+        draw_text("1: Sākt spēli", 50, 200, (0, 255, 204), 22)
+        draw_text("2: Līderu tabula", 50, 240, (255, 215, 0), 22)
+        draw_text("3: Atvērt vietni (Browser)", 50, 280, (0, 204, 255), 22)
+        draw_text("4: Iziet", 50, 320, (200, 100, 100), 22)
         
     elif state == 'in_game_leaderboard':
         draw_text("TOP 10 LĪDERU TABULA", 80, 40, (255, 215, 0), 26)
@@ -224,7 +215,6 @@ while running:
             lvl = entry.get("level", 1)
             line = f"{idx+1}.      {uname:<12}   {score:<6}   {lvl}"
             
-            # TOP 1 tiek izcelts zelta krāsā
             row_color = (255, 215, 0) if idx == 0 else (255, 255, 255)
             draw_text(line, 40, y_offset, row_color, 18)
             y_offset += 32
@@ -293,10 +283,15 @@ while running:
 
         if state == 'pause':
             overlay = pygame.Surface((400, 640))
-            overlay.set_alpha(150)
+            overlay.set_alpha(180)
             overlay.fill((0, 0, 0))
             screen.blit(overlay, (0, 0))
-            draw_text("PAUZE", 160, 280, (255, 255, 0))
+            
+            draw_text("PAUZE", 160, 180, (255, 255, 0), 32)
+            draw_text("[P] Turpināt spēli", 70, 250, (255, 255, 255), 20)
+            draw_text("[M] Atgriezties izvēlnē", 70, 290, (255, 215, 0), 20)
+            draw_text("[L] Atvērt vietni", 70, 330, (0, 204, 255), 20)
+            draw_text("[Q] Iziet no spēles", 70, 370, (255, 100, 100), 20)
             
         elif state == 'game_over':
             overlay = pygame.Surface((400, 640))
@@ -304,13 +299,13 @@ while running:
             overlay.fill((0, 0, 0))
             screen.blit(overlay, (0, 0))
             
-            draw_text("SPĒLE BEIGUSIES", 95, 160, (255, 0, 0))
-            draw_text(f"Tavs rezultāts: {game.score}", 105, 200, (255, 255, 255))
+            draw_text("SPĒLE BEIGUSIES", 95, 170, (255, 0, 0))
+            draw_text(f"Tavs rezultāts: {game.score}", 105, 215, (255, 255, 255))
             
-            draw_text("[1] Spēlēt no jauna", 45, 260, (255, 255, 255), 20)
-            draw_text("[2] Paskatīties līderu tabulu", 45, 300, (255, 215, 0), 20)
-            draw_text("[3] Atvērt vietni (Browser)", 45, 340, (0, 204, 255), 20)
-            draw_text("[4] Atgriezties izvēlnē", 45, 380, (200, 100, 100), 20)
+            draw_text("[1] Spēlēt no jauna", 50, 280, (255, 255, 255), 22)
+            draw_text("[2] Paskatīties līderu tabulu", 50, 320, (255, 215, 0), 22)
+            draw_text("[3] Atvērt vietni (Browser)", 50, 360, (0, 204, 255), 22)
+            draw_text("[B] Atgriezties izvēlnē", 50, 400, (200, 200, 200), 22)
 
     pygame.display.flip()
     clock.tick(30)
