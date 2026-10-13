@@ -3,7 +3,6 @@ import sqlite3
 import hashlib
 import jwt
 import datetime
-import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'tetris_secret_key_123'
