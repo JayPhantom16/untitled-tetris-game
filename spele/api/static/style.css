@@ -1,6 +1,6 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #121212;
+    background-color: #000000;
     color: #e0e0e0;
     margin: 0;
     padding: 0;
@@ -21,7 +21,7 @@ body {
 }
 
 h1 {
-    color: #00ffcc;
+    color: #ff3939;
     margin-bottom: 20px;
 }
 
@@ -45,7 +45,7 @@ p {
     background-color: #2e2e2e;
     color: #ffffff;
     padding: 12px 20px;
-    border: 2px solid #00ffcc;
+    border: 2px solid #ae57ff;
     border-radius: 8px;
     text-decoration: none;
     font-size: 16px;
@@ -55,7 +55,7 @@ p {
 }
 
 .btn:hover {
-    background-color: #00ffcc;
+    background-color: #e9b2ff;
     color: #121212;
     box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
 }

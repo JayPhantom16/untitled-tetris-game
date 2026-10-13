@@ -34,12 +34,34 @@ def load_local_scores():
 
 def save_local_score(uname, score, level):
     scores = load_local_scores()
-    scores.append({"username": uname, "score": score, "level": level})
-    # Sakārtojam dilstošā secībā pēc punktiem un paturam TOP 10
-    scores = sorted(scores, key=lambda x: x["score"], reverse=True)[:10]
+    
+    # Pārbaudām, vai šis spēlētājs jau ir sarakstā
+    existing_player = next((s for s in scores if s["username"] == uname), None)
+    
+    if existing_player:
+        # Ja jaunais rezultāts ir labāks, atjauninām to
+        if score > existing_player["score"]:
+            existing_player["score"] = score
+            existing_player["level"] = level
+    else:
+        # Ja spēlētāja vēl nav, pievienojam jaunu ierakstu
+        scores.append({"username": uname, "score": score, "level": level})
+        
+    # Sakārtojam dilstošā secībā pēc punktiem, saglabājam tikai labāko rezultātu katram un paturam TOP 10
+    scores = sorted(scores, key=lambda x: x["score"], reverse=True)
+    
+    unique_scores = []
+    seen_users = set()
+    for s in scores:
+        if s["username"] not in seen_users:
+            seen_users.add(s["username"])
+            unique_scores.append(s)
+            
+    unique_scores = unique_scores[:10]
+    
     try:
         with open(LOCAL_SCORES_FILE, "w", encoding="utf-8") as f:
-            json.dump(scores, f, ensure_ascii=False, indent=4)
+            json.dump(unique_scores, f, ensure_ascii=False, indent=4)
     except:
         pass
 
@@ -50,12 +72,21 @@ def fetch_leaderboard():
         if res.status_code == 200:
             server_scores = res.json()
             if server_scores:
-                leaderboard_data = sorted(server_scores, key=lambda x: x["score"], reverse=True)[:10]
+                # Apstrādājam servera datus, lai katrs spēlētājs būtu tikai 1 reizi
+                unique_dict = {}
+                for entry in server_scores:
+                    uname = entry.get("username")
+                    score = entry.get("score", 0)
+                    if uname not in unique_dict or score > unique_dict[uname]["score"]:
+                        unique_dict[uname] = entry
+                
+                sorted_scores = sorted(unique_dict.values(), key=lambda x: x["score"], reverse=True)
+                leaderboard_data = sorted_scores[:10]
                 return
     except:
         pass
     
-    # Ja serveris nav pieejams, ņemam datus no lokālā faila (jau sakārtoti TOP 10)
+    # Ja serveris nav pieejams, ņemam datus no lokālā faila
     leaderboard_data = load_local_scores()
     if not leaderboard_data:
         leaderboard_data = [{"username": "Nav datu", "score": 0, "level": 1}]
@@ -140,6 +171,11 @@ while running:
                 elif event.key == pygame.K_3:
                     # 3. Atvērt vietni (Browser)
                     webbrowser.open(BASE_URL)
+                elif event.key == pygame.K_4:
+                    # 4. Atgriezties galvenajā izvēlnē
+                    state = 'menu'
+                    username = ""
+                    game = TetrisGame()
 
     # Spēles loģika
     if state == 'game':
@@ -268,12 +304,13 @@ while running:
             overlay.fill((0, 0, 0))
             screen.blit(overlay, (0, 0))
             
-            draw_text("SPĒLE BEIGUSIES", 95, 170, (255, 0, 0))
-            draw_text(f"Tavs rezultāts: {game.score}", 105, 215, (255, 255, 255))
+            draw_text("SPĒLE BEIGUSIES", 95, 160, (255, 0, 0))
+            draw_text(f"Tavs rezultāts: {game.score}", 105, 200, (255, 255, 255))
             
-            draw_text("[1] Spēlēt no jauna", 50, 280, (255, 255, 255), 22)
-            draw_text("[2] Paskatīties līderu tabulu", 50, 320, (255, 215, 0), 22)
-            draw_text("[3] Atvērt vietni (Browser)", 50, 360, (0, 204, 255), 22)
+            draw_text("[1] Spēlēt no jauna", 45, 260, (255, 255, 255), 20)
+            draw_text("[2] Paskatīties līderu tabulu", 45, 300, (255, 215, 0), 20)
+            draw_text("[3] Atvērt vietni (Browser)", 45, 340, (0, 204, 255), 20)
+            draw_text("[4] Atgriezties izvēlnē", 45, 380, (200, 100, 100), 20)
 
     pygame.display.flip()
     clock.tick(30)
