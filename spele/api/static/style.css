@@ -8,6 +8,13 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+
+    background-image: url("/static/images/background.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
 }
 
 .container {
@@ -84,7 +91,7 @@ th, td {
 
 th {
     background-color: #252525;
-    color: #00ffcc;
+    color: #69d4ba;
 }
 
 tr.top-one {
