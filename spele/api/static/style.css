@@ -62,7 +62,7 @@ p {
 }
 
 .btn:hover {
-    background-color: #e9b2ff;
+    background-color: #ae57ff;
     color: #121212;
     box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
 }
@@ -74,7 +74,7 @@ p {
 .btn-primary:hover {
     background-color: #ffcc00;
     color: #121212;
-    box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+    box-shadow: 0 0 15px rgba(36, 36, 36, 0.4);
 }
 
 table {
@@ -85,13 +85,13 @@ table {
 
 th, td {
     padding: 12px;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #535353;
     text-align: center;
 }
 
 th {
     background-color: #252525;
-    color: #69d4ba;
+    color: #3aecc0;
 }
 
 tr.top-one {

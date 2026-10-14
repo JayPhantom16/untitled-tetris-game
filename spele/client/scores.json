@@ -1,5 +1,10 @@
 [
     {
+        "username": "JayPhantom16",
+        "score": 16100,
+        "level": 5
+    },
+    {
         "username": "testplayer2",
         "score": 2900,
         "level": 5
@@ -35,18 +40,13 @@
         "level": 3
     },
     {
+        "username": "testplayer0",
+        "score": 500,
+        "level": 3
+    },
+    {
         "username": "testplayer8",
         "score": 400,
         "level": 2
-    },
-    {
-        "username": "testplayer0",
-        "score": 200,
-        "level": 1
-    },
-    {
-        "username": "testplayer9",
-        "score": 100,
-        "level": 1
     }
 ]
