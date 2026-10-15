@@ -1,35 +1,42 @@
 # Untitled Tetris Game
 
-### 1. Nosaukums: Untitled Tetris Game
+## Kā palaist projektu:
 
-### 2. Mērķis: Spēlētājs cenšas iegūt pēc iespējas vairāk punktus, kārtojot krītošās figūras līnijās. Spēle beidzas, kad figūras sasniedz laukuma augšējo malu.
+### Priekšnosacījumi
+Pārliecinieties, ka datorā ir instalēts **Python (3.11+)**.
 
-### 3. Vadība:
+1. Datora terminālī parejiet mapē (cd C:\projekts\spele\api). Palaidiet serveri ar komandu python main.py.
+2. Otrajā terminālī palaidiet spēles klientu: (cd C:\projekts\spele\api ==> python main.py).
+3. Ievadiet savu vārdu un spiediet Enter!
 
-### Bultiņa pa kreisi / pa labi (⬅, ➡) – pārvietot figūru pa kreisi vai pa labi.
+##  Kā spēlēt (Vadība):
 
-### Bultiņa uz leju (⬇) – paātrināt krišanu.
+    Bultiņa pa kreisi / pa labi: Pārvietot figūru pa kreisi vai pa labi.
 
-### Bultiņa uz augšu (⬆) – pagriezt figūru.
+    Bultiņa uz leju: Paātrināt figūras krišanu.
 
-### P taustiņš – pauze.
+    Bultiņa uz augšu: Pagriezt figūru.
 
-### 4. Pamata cikls:
+    P: Pauze (pauzes ekrānā iespējams turpināt spēli, atgriezties izvēlnē vai iziet).
 
-### Darbība: Figūra krīt; spēlētājs to pārvieto un groza.
+    Zelta figūras: Nejauši parādās dzeltenas zelta figūras. Pēc fiksēšanas laukumā jums ir 10 sekundes, lai tās izmantotu rindas notīrīšanā un iegūtu papildu punktus, pirms tās zaudē savu statusu.
 
-### Rezultāts: Rinda tiek aizpildīta un izdzēsta, vai arī figūra apstājas laukuma augšā.
 
-### Atlīdzība: Punkti par notīrītām rindām un papildu punkti par zelta figūru izdzēšanu.
+## API Endpointu tabula
 
-### 5. Mehānikas:
+| Adrese (Endpoint) | Metode | Saturs un Apraksts |
+| :--- | :--- | :--- |
+| `/` | GET | Galvenā lapa: attēlo TOP 10 līderu tabulu, kurā katrs spēlētājs parādās tikai 1 reizi ar savu labāko rezultātu (TOP 1 izcelts zelta krāsā). |
+| `/rules` | GET | Spēles noteikumi: detalizēts apraksts par vadību, zelta figūru mehāniku (10 sekunžu taimeri), līmeņiem un klienta palaišanu. |
+| `/register` | POST | API: Reģistrē jaunu spēlētāju datubāzē, izmantojot lietotājvārdu un šifrētu paroli. |
+| `/login` | POST | API: Autentificē lietotāju un izsniedz piekļuves tokenu (JWT). |
+| `/scores` | POST | API: Saglabā spēlētāja sasniegto punktu skaitu un līmeni SQLite datubāzē. |
+| `/api/scores` | GET | API: Atgriež 10 labākos rezultātus JSON formātā spēles klienta lokālajam līderu skatam. |
 
-### Mehānika 1: Ja spēlētājs ilgstoši neizdzēš nevienu rindu, spēle pakāpeniski palielina figūru krišanas ātrumu.
+## Funkcionalitāte
 
-### Mehānika 2: Nejauši parādās zelta figūra. Ja to notīra rindā, iegūst papildu punktus; ja tā paliek nenotīrītajā laukuma daļā, tā kļūst par parastu figūru.
+    5 Grūtības līmeņi: Spēle kļūst straujāka atkarībā no sasniegtajiem punktiem.
 
-### 6. Līmeņi: Spēlei ir 3 līmeņi. Katrā nākamajā līmenī bāzes ātrums palielinās, un lai pārietu uz nākamo līmeni, jāiegūst noteikts punktu skaits.
+    Dublēšanās novēršana: Gan lokālajā failā (scores.json), gan servera datubāzē katrs spēlētājs parādās tikai 1 reizi ar savu augstāko rezultātu.
 
-### 7. Punkti: Par parastu rindas notīrīšanu: 100 punkti; par zelta figūras rindu: 200 punkti.
-
-### 8. Saglabā: Spēlētāja vārds un iegūtie punkti tiek nosūtīti un saglabāti servera datubāzē/atmiņā, lai izveidotu Top 10 rekordu sarakstu.
+    Bezsaistes režīms: Ja serveris nav sasniedzams, spēle saglabā rezultātus lokālajā scores.json failā.
