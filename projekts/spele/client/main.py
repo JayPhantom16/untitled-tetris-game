@@ -244,10 +244,6 @@ while running:
                     game.current_piece["x"] += 1
                     if game.check_collision():
                         game.current_piece["x"] -= 1
-                elif event.key == pygame.K_DOWN:
-                    game.current_piece["y"] += 1
-                    if game.check_collision():
-                        game.current_piece["y"] -= 1
                 elif event.key == pygame.K_UP:
                     game.rotate_piece()
                     
@@ -280,6 +276,9 @@ while running:
         game.update_gold_status()
         drop_counter += 1
         speed_threshold = max(5, 30 - (game.level - 1) * 5)
+        
+        if pygame.key.get_pressed()[pygame.K_DOWN]:
+            speed_threshold = min(speed_threshold, 2)
         
         if drop_counter > speed_threshold:
             game.current_piece["y"] += 1
