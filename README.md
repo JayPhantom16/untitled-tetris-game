@@ -1,5 +1,22 @@
 # Untitled Tetris Game
 
+##  Instalācija un vides iestatīšana (Tikai pirmajai reizei)
+
+Ja instalējat projektu pirmo reizi, lūdzu, izpildiet šīs darbības terminālī (projekta saknes mapē):
+
+1. Izveidot virtuālo vidi (venv):
+
+
+   `python -m venv .venv`
+
+2. Aktivizēt virtuālo vidi:
+
+  `.venv\Scripts\Activate.ps1` 
+
+ (Pēc aktivizācijas termināļa rindiņas sākumā parādīsies (venv)).
+
+3. Instalēt nepieciešamās bibliotēka:
+   `pip install flask pyjwt requests pygame`
 ## Kā palaist projektu:
 
 ### Priekšnosacījumi
