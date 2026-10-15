@@ -1,5 +1,10 @@
 # Untitled Tetris Game
 
+## Kā palaist projektu:
+
+### Priekšnosacījumi
+Pārliecinieties, ka datorā ir instalēts **Python (3.11+)**.
+
 ##  Instalācija un vides iestatīšana (Tikai pirmajai reizei)
 
 Ja instalējat projektu pirmo reizi, lūdzu, izpildiet šīs darbības terminālī (projekta saknes mapē):
@@ -17,13 +22,9 @@ Ja instalējat projektu pirmo reizi, lūdzu, izpildiet šīs darbības termināl
 
 3. Instalēt nepieciešamās bibliotēka:
    `pip install flask pyjwt requests pygame`
-## Kā palaist projektu:
-
-### Priekšnosacījumi
-Pārliecinieties, ka datorā ir instalēts **Python (3.11+)**.
 
 1. Datora terminālī parejiet mapē (cd C:\projekts\spele\api). Palaidiet serveri ar komandu python main.py.
-2. Otrajā terminālī palaidiet spēles klientu: (cd C:\projekts\spele\api ==> python main.py).
+2. Otrajā terminālī palaidiet spēles klientu: (`cd C:\projekts\spele\api` ➡   `python main.py` ).
 3. Ievadiet savu vārdu un spiediet Enter!
 
 ##  Kā spēlēt (Vadība):
