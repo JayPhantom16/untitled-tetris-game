@@ -28,7 +28,7 @@ body {
 }
 
 h1 {
-    color: #ff3939;
+    color: #b534ff;
     margin-bottom: 20px;
 }
 
@@ -64,7 +64,7 @@ p {
 .btn:hover {
     background-color: #ae57ff;
     color: #121212;
-    box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+    box-shadow: 0 0 15px rgba(249, 186, 255, 0.603);
 }
 
 .btn-primary {
@@ -91,7 +91,7 @@ th, td {
 
 th {
     background-color: #252525;
-    color: #3aecc0;
+    color: #868686;
 }
 
 tr.top-one {
