@@ -102,7 +102,7 @@ def draw_gold_block(x, y, size):
 
 
 def draw_panel(rect, alpha=60, radius=10, border=None):
-    # тёмная подложка для лучшей читаемости текста
+
     s = pygame.Surface((rect[2], rect[3]), pygame.SRCALPHA)
     pygame.draw.rect(s, (8, 8, 20, min(235, 140 + alpha * 4)), s.get_rect(), border_radius=radius)
     screen.blit(s, (rect[0], rect[1]))
