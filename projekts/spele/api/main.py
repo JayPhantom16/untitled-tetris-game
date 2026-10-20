@@ -64,8 +64,7 @@ def sync_json_to_db():
         except:
             pass
 
-def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
+
 
 @app.route('/')
 def index():
@@ -94,7 +93,7 @@ def rules():
 def register():
     data = request.json
     username = data.get('username')
-    password = data.get('password', '123')
+  
     
     if not username:
         return jsonify({"error": "Nepieciešams lietotājvārds"}), 400
@@ -102,7 +101,7 @@ def register():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, hash_password(password)))
+        cursor.execute("INSERT INTO users (username,) VALUES (?, ?)", (username))
         conn.commit()
     except sqlite3.IntegrityError:
         pass
@@ -115,7 +114,7 @@ def register():
 def login():
     data = request.json
     username = data.get('username')
-    password = data.get('password', '123')
+
     
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -132,6 +131,7 @@ def login():
         
     return jsonify({"error": "Nederīgi dati"}), 401
 
+# POST metode, kas saņem JSON datus no spēles klienta (lietotājvārdu un punktus) un saglabā tos SQLite datubāzē.
 @app.route('/scores', methods=['POST'])
 def post_score():
     data = request.json
