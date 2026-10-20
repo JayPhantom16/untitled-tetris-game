@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, jsonify
 import sqlite3
-import hashlib
 import jwt
 import datetime
 import os
