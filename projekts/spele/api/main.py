@@ -71,6 +71,7 @@ def index():
     
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
+
     cursor.execute('''
         SELECT username, MAX(score) as score, MAX(level) as level 
         FROM scores 
@@ -78,6 +79,7 @@ def index():
         ORDER BY score DESC 
         LIMIT 10
     ''')
+
     rows = cursor.fetchall()
     conn.close()
     
@@ -130,7 +132,7 @@ def login():
         
     return jsonify({"error": "Nederīgi dati"}), 401
 
-# POST metode, kas saņem JSON datus no spēles klienta (lietotājvārdu un punktus) un saglabā tos SQLite datubāzē.
+
 @app.route('/scores', methods=['POST'])
 def post_score():
     data = request.json
