@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import sys
 import os
 import pygame
@@ -864,5 +864,4 @@ while running:
     clock.tick(30)
 
 pygame.quit()
->>>>>>> b8fdab76fa7ba2f49bb8fb796cf5ebd7d484c39e
 sys.exit()
