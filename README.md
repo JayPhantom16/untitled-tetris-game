@@ -11,7 +11,6 @@ Ja instalējat projektu pirmo reizi, lūdzu, izpildiet šīs darbības termināl
 
 1. Izveidot virtuālo vidi (venv):
 
-
    `python -m venv .venv`
 
 2. Aktivizēt virtuālo vidi:
@@ -51,7 +50,6 @@ Ja instalējat projektu pirmo reizi, lūdzu, izpildiet šīs darbības termināl
 | `/scores` | POST | API: Saglabā spēlētāja sasniegto punktu skaitu un līmeni SQLite datubāzē ar datu validāciju (201 Created). |
 | `/api/scores` | GET | API: Atgriež 10 labākos rezultātus JSON formātā spēles klienta lokālajam līderu skatam. |
 | `/players/{name}/stats` | GET | API: Atgriež konkrētā spēlētāja nospēlēto spēļu skaitu un labāko rezultātu (404, ja spēlētājs nav atrasts). |
-
 
 ## Funkcionalitāte
 
