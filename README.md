@@ -11,7 +11,6 @@ Ja instalējat projektu pirmo reizi, lūdzu, izpildiet šīs darbības termināl
 
 1. Izveidot virtuālo vidi (venv):
 
-
    `python -m venv .venv`
 
 2. Aktivizēt virtuālo vidi:
