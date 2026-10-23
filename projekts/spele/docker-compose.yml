@@ -1,7 +1,16 @@
+<<<<<<< HEAD
 version: '3.8'
 services:
   server:
     build: .
     ports:
       - "8000:8000"
+=======
+version: '3.8'
+services:
+  server:
+    build: .
+    ports:
+      - "8000:8000"
+>>>>>>> b8fdab76fa7ba2f49bb8fb796cf5ebd7d484c39e
     restart: always

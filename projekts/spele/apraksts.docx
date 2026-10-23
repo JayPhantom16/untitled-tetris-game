@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Untitled Tetris Game
 
 1.	 Nosaukums: 
@@ -40,3 +41,47 @@ Par parastu rindas notīrīšanu: 100 punkti; par zelta figūras rindu: 200 punk
 8.	Saglabā:
 
  Spēlētāja vārds un iegūtie punkti tiek nosūtīti un saglabāti servera datubāzē/atmiņā, lai izveidotu Top 10 rekordu sarakstu.
+=======
+# Untitled Tetris Game
+
+1.	 Nosaukums: 
+
+ Untitled Tetris Game
+
+2.	 Mērķis: 
+
+Spēlētājs cenšas iegūt pēc iespējas vairāk punktus, kārtojot krītošās figūras līnijās. Spēle beidzas, kad figūras sasniedz laukuma augšējo malu.
+
+3.	Vadība:
+
+Bultiņa pa kreisi / pa labi (⬅, ➡) – pārvietot figūru pa kreisi vai pa labi.
+
+Bultiņa uz leju (⬇) – paātrināt krišanu.
+
+Bultiņa uz augšu (⬆) – pagriezt figūru.
+
+P taustiņš – pauze.
+
+4.	Pamata cikls:
+
+Darbība: Figūra krīt; spēlētājs to pārvieto un groza.
+Rezultāts: Rinda tiek aizpildīta un izdzēsta, vai arī figūra apstājas laukuma augšā.
+Atlīdzība: Punkti par notīrītām rindām un papildu punkti par zelta figūru izdzēšanu.
+
+5.	 Mehānikas:
+
+Mehānika 1: Ja spēlētājs ilgstoši neizdzēš nevienu rindu, spēle pakāpeniski palielina figūru krišanas ātrumu.
+Mehānika 2: Nejauši parādās zelta figūra. Ja to notīra rindā, iegūst papildu punktus; ja tā paliek nenotīrītajā laukuma daļā, tā kļūst par parastu figūru.
+
+6.	Līmeņi:
+
+ Spēlei ir 3 līmeņi. Katrā nākamajā līmenī bāzes ātrums palielinās, un lai pārietu uz nākamo līmeni, jāiegūst noteikts punktu skaits.
+
+7.	Punkti: 
+
+Par parastu rindas notīrīšanu: 100 punkti; par zelta figūras rindu: 200 punkti.
+
+8.	Saglabā:
+
+ Spēlētāja vārds un iegūtie punkti tiek nosūtīti un saglabāti servera datubāzē/atmiņā, lai izveidotu Top 10 rekordu sarakstu.
+>>>>>>> b8fdab76fa7ba2f49bb8fb796cf5ebd7d484c39e

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="lv">
 <head>
@@ -25,4 +26,33 @@
         </div>
     </div>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <title>UTG RULES</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container" style="text-align: left;">
+        <h1>Spēles noteikumi & Kā sākt</h1>
+        
+        <h2>🕹️ Kā sākt spēli?</h2>
+        <p>1. Datora terminālī parejiet mapē (<code>cd C:\projekts ➡ cd projekts\spele\api</code>). Palaidiet serveri ar komandu <code>python main.py</code>.<br>
+           2. Otrajā terminālī palaidiet spēles klientu: (<code>cd C:\projekts ➡ projekts\spele\client</code> ➡ <code>python main.py</code>).<br>
+           3. Ievadiet savu vārdu un spiediet <b>Enter</b>!</p>
+
+        <h2>⚙️ Spēles mehānika un noteikumi</h2>
+        <p><b>Vadība:</b> Bultiņa pa kreisi / pa labi (⬅, ➡) – pārvietot figūru pa kreisi vai pa labi. Bultiņa uz leju (⬇) – paātrināt krišanu. Bultiņa uz augšu (⬆) – pagriezt figūru. P – pauze.</p>
+        <p><b>Zelta figūras:</b> Spēlē nejauši parādās zelta figūras(dzeltena krāsa). Kad tās fiksējas laukumā, Jums ir 10 sekundes, lai notīrītu rindu ar šo bloku <b>(papildus punkti par katru notīrītu rindu)</b>, jo tā pazaudēs savu zeltu statusu.</p>
+        <p><b>Grūtības pakāpes:</b> Spēlei ir 5 līmeņi. Ja ilgi nenotīrāt rindas, spēle automātiski paātrinās un varat zaudēt punktus.</p>
+        <p><b>Līderu tabula:</b> Visi jūsu rekordi tiek automātiski saglabāti un redzami gan spēlē, gan šajā tīmekļa vietnē!</p>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/" class="btn btn-secondary">Atpakaļ uz līderu tabulu</a>
+        </div>
+    </div>
+</body>
+>>>>>>> b8fdab76fa7ba2f49bb8fb796cf5ebd7d484c39e
 </html>
