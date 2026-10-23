@@ -9,7 +9,7 @@ LOCAL_FILE = "scores.json"
 def send_score_to_server(username, score):
     data = {"username": username, "score": score}
     try:
-        # Пытаемся отправить данные на сервер через POST
+    
         response = requests.post(SERVER_URL, json=data, timeout=3)
         if response.status_code == 200:
             print("Rezultāts veiksmīgi nosūtīts uz serveri!")
@@ -20,7 +20,7 @@ def send_score_to_server(username, score):
     return False
 
 def save_local_score(username, score):
-    # Сохранение в кеш-файл scores.json при отсутствии сети
+
     scores = []
     if os.path.exists(LOCAL_FILE):
         try:
