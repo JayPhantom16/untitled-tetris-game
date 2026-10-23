@@ -40,16 +40,18 @@ Ja instalējat projektu pirmo reizi, lūdzu, izpildiet šīs darbības termināl
     Zelta figūras: Nejauši parādās dzeltenas zelta figūras. Pēc fiksēšanas laukumā jums ir 10 sekundes, lai tās izmantotu rindas notīrīšanā un iegūtu papildu punktus, pirms tās zaudē savu statusu.
 
 
-## API Endpointu tabula
+## API adrešu saraksts
 
 | Adrese (Endpoint) | Metode | Saturs un Apraksts |
 | :--- | :--- | :--- |
 | `/` | GET | Galvenā lapa: attēlo TOP 10 līderu tabulu, kurā katrs spēlētājs parādās tikai 1 reizi ar savu labāko rezultātu (TOP 1 izcelts zelta krāsā). |
 | `/rules` | GET | Spēles noteikumi: detalizēts apraksts par vadību, zelta figūru mehāniku (10 sekunžu taimeri), līmeņiem un klienta palaišanu. |
-| `/register` | POST | API: Reģistrē jaunu spēlētāju datubāzē, izmantojot lietotājvārdu un šifrētu paroli. |
-| `/login` | POST | API: Autentificē lietotāju un izsniedz piekļuves tokenu (JWT). |
-| `/scores` | POST | API: Saglabā spēlētāja sasniegto punktu skaitu un līmeni SQLite datubāzē. |
+| `/register` | POST | API: Reģistrē jaunu spēlētāju datubāzē, izmantojot lietotājvārdu un šifrētu paroli (201 Created / 400 Bad Request). |
+| `/login` | POST | API: Autentificē lietotāju, salīdzina paroles hešu un izsniedz piekļuves tokenu (JWT). |
+| `/scores` | POST | API: Saglabā spēlētāja sasniegto punktu skaitu un līmeni SQLite datubāzē ar datu validāciju (201 Created). |
 | `/api/scores` | GET | API: Atgriež 10 labākos rezultātus JSON formātā spēles klienta lokālajam līderu skatam. |
+| `/players/{name}/stats` | GET | API: Atgriež konkrētā spēlētāja nospēlēto spēļu skaitu un labāko rezultātu (404, ja spēlētājs nav atrasts). |
+
 
 ## Funkcionalitāte
 
