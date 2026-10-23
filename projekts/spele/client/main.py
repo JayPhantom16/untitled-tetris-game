@@ -1,4 +1,3 @@
-
 import sys
 import os
 import pygame
@@ -19,6 +18,7 @@ LOCAL_SCORES_FILE = "scores.json"
 
 state = 'menu'
 username = ""
+password = ""
 token = None
 game = TetrisGame()
 drop_counter = 0
@@ -103,7 +103,6 @@ def draw_gold_block(x, y, size):
 
 
 def draw_panel(rect, alpha=60, radius=10, border=None):
-
     s = pygame.Surface((rect[2], rect[3]), pygame.SRCALPHA)
     pygame.draw.rect(s, (8, 8, 20, min(235, 140 + alpha * 4)), s.get_rect(), border_radius=radius)
     screen.blit(s, (rect[0], rect[1]))
@@ -205,7 +204,6 @@ while running:
                     fetch_leaderboard()
                     state = 'in_game_leaderboard'
                 elif event.key == pygame.K_3:
-                    # Atvērt vietni no galvenās izvēlnes
                     webbrowser.open(BASE_URL)
                 elif event.key == pygame.K_4:
                     running = False
@@ -218,9 +216,19 @@ while running:
         elif state == 'input_name':
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN and len(username) > 0:
+                    state = 'input_password'
+                elif event.key == pygame.K_BACKSPACE:
+                    username = username[:-1]
+                else:
+                    if len(username) < 15 and event.unicode.isalnum():
+                        username += event.unicode
+                        
+        elif state == 'input_password':
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN and len(password) > 0:
                     try:
-                        requests.post(f"{BASE_URL}/register", json={"username": username, "password": "123"}, timeout=1)
-                        res = requests.post(f"{BASE_URL}/login", json={"username": username, "password": "123"}, timeout=1)
+                        requests.post(f"{BASE_URL}/register", json={"username": username, "password": password}, timeout=1)
+                        res = requests.post(f"{BASE_URL}/login", json={"username": username, "password": password}, timeout=1)
                         if res.status_code == 200:
                             token = res.json().get("token")
                     except:
@@ -228,10 +236,10 @@ while running:
                     state = 'game'
                     game = TetrisGame()
                 elif event.key == pygame.K_BACKSPACE:
-                    username = username[:-1]
+                    password = password[:-1]
                 else:
-                    if len(username) < 15 and event.unicode.isalnum():
-                        username += event.unicode
+                    if len(password) < 20 and event.unicode.isalnum():
+                        password += event.unicode
                         
         elif state == 'game':
             if event.type == pygame.KEYDOWN:
@@ -251,13 +259,13 @@ while running:
         elif state == 'pause':
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
-                    state = 'game'  # Atgriezties spēlē
+                    state = 'game'
                 elif event.key == pygame.K_m or event.key == pygame.K_b:
-                    state = 'menu'  # Atgriezties galvenajā izvēlnē
+                    state = 'menu'
                 elif event.key == pygame.K_q:
-                    running = False # Iziet no spēles pilnībā
+                    running = False
                 elif event.key == pygame.K_l:
-                    webbrowser.open(BASE_URL) # Atvērt vietni arī pauzes laikā, ja vajag
+                    webbrowser.open(BASE_URL)
                 
         elif state == 'game_over':
             if event.type == pygame.KEYDOWN:
@@ -354,7 +362,15 @@ while running:
         draw_panel((40, 222, 320, 44), 25, 8, ACCENT)
         cursor = "_" if (pygame.time.get_ticks() // 500) % 2 else " "
         draw_text(f"> {username}{cursor}", 55, 230, (0, 255, 204))
-        draw_text("Nospied [ENTER], lai sāktu", 50, 300, MUTED)
+        draw_text("Nospied [ENTER], lai turpinātu", 50, 300, MUTED, size=18) 
+        
+    elif state == 'input_password':
+        draw_text("Ievadi savu paroli:", 50, 180)
+        draw_panel((40, 222, 320, 44), 25, 8, ACCENT)
+        cursor = "_" if (pygame.time.get_ticks() // 500) % 2 else " "
+        masked_pwd = "*" * len(password)
+        draw_text(f"> {masked_pwd}{cursor}", 55, 230, (255, 215, 0))
+        draw_text("Nospied [ENTER], lai sāktu spēli", 50, 300, MUTED, size=18)
         
     elif state in ['game', 'pause', 'game_over']:
         block_size = 25
@@ -363,7 +379,6 @@ while running:
         rows = len(game.board)
         cols = len(game.board[0])
 
-        
         frame = pygame.Rect(board_x - 6, board_y - 6, cols * block_size + 12, rows * block_size + 12)
         pygame.draw.rect(screen, (10, 10, 20), frame, border_radius=8)
         pygame.draw.rect(screen, ACCENT, frame, 2, border_radius=8)
