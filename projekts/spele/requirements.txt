@@ -1,8 +1,4 @@
-<<<<<<< HEAD
+
 Flask==3.0.2
-pygame==2.5.2
-=======
-Flask==3.0.2
-pygame==2.5.2
->>>>>>> b8fdab76fa7ba2f49bb8fb796cf5ebd7d484c39e
+pygame==2.5.
 requests==2.31.0

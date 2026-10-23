@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import sqlite3
 import hashlib
 import os
@@ -38,7 +38,7 @@ def hash_password(password: str, salt: str = None):
     if not salt:
         salt = os.urandom(16).hex()
     pwd_hash = hashlib.sha256((password + salt).encode()).hexdigest()
-=======
+
 import sqlite3
 import hashlib
 import os
@@ -78,5 +78,5 @@ def hash_password(password: str, salt: str = None):
     if not salt:
         salt = os.urandom(16).hex()
     pwd_hash = hashlib.sha256((password + salt).encode()).hexdigest()
->>>>>>> b8fdab76fa7ba2f49bb8fb796cf5ebd7d484c39e
+
     return pwd_hash, salt

@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 [
     {
         "username": "JayPhantom16",
@@ -50,57 +50,5 @@
         "score": 400,
         "level": 2
     }
-=======
-[
-    {
-        "username": "JayPhantom16",
-        "score": 24400,
-        "level": 5
-    },
-    {
-        "username": "testplayer1",
-        "score": 4800,
-        "level": 5
-    },
-    {
-        "username": "testplayer2",
-        "score": 2900,
-        "level": 5
-    },
-    {
-        "username": "testplayer5",
-        "score": 2800,
-        "level": 5
-    },
-    {
-        "username": "testplayer4",
-        "score": 2500,
-        "level": 5
-    },
-    {
-        "username": "testplayer6",
-        "score": 1600,
-        "level": 5
-    },
-    {
-        "username": "testplayer3",
-        "score": 1100,
-        "level": 5
-    },
-    {
-        "username": "testplayer7",
-        "score": 1000,
-        "level": 4
-    },
-    {
-        "username": "testplayer0",
-        "score": 800,
-        "level": 4
-    },
-    {
-        "username": "testplayer8",
-        "score": 500,
-        "level": 3
-    }
->>>>>>> b8fdab76fa7ba2f49bb8fb796cf5ebd7d484c39e
+
 ]
