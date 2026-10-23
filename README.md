@@ -52,7 +52,6 @@ Ja instalējat projektu pirmo reizi, lūdzu, izpildiet šīs darbības termināl
 | `/api/scores` | GET | API: Atgriež 10 labākos rezultātus JSON formātā spēles klienta lokālajam līderu skatam. |
 | `/players/{name}/stats` | GET | API: Atgriež konkrētā spēlētāja nospēlēto spēļu skaitu un labāko rezultātu (404, ja spēlētājs nav atrasts). |
 
-
 ## Funkcionalitāte
 
     5 Grūtības līmeņi: Spēle kļūst straujāka atkarībā no sasniegtajiem punktiem.
