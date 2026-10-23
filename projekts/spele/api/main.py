@@ -6,7 +6,6 @@ import datetime
 import os
 import json
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'tetris_secret_key_123'
 DB_PATH = "database.db"
