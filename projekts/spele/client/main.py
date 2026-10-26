@@ -11,6 +11,7 @@ import requests
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from game.logic import TetrisGame
 
+
 pygame.init()
 screen = pygame.display.set_mode((400, 640))
 pygame.display.set_caption("Untitled Tetris Game")
