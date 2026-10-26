@@ -204,38 +204,75 @@ def start_new_game():
 
 
 def do_auth():
-    """Reģistrē (ja vajag) un pārbauda pieteikšanos serverī. Spēle sākas tikai pie veiksmes."""
+    """Reģistrē vai pieraksta lietotāju; ja serveris nav pieejams, izmanto lokālo datni."""
     global token, error_msg, offline_mode, password
+
+    if not username.strip():
+        error_msg = "Ievadiet lietotājvārdu!"
+        return
+    if not password:
+        error_msg = "Ievadiet paroli!"
+        return
+
     offline_mode = False
+
     try:
         if auth_action == 'register':
-            res = requests.post(f"{BASE_URL}/register",
-                                json={"username": username, "password": password}, timeout=3)
-            if res.status_code != 201:
-                try:
-                    msg = res.json().get("error", "Kļūda reģistrējoties!")
-                except Exception:
-                    msg = "Kļūda reģistrējoties!"
-                reset_auth_input()
-                error_msg = msg
+            res = requests.post(
+                f"{BASE_URL}/register",
+                json={"username": username, "password": password},
+                timeout=3,
+            )
+            if res.status_code == 201:
+                remember_user(username, password)
+                token = None
+                offline_mode = True
+                error_msg = ""
+                start_new_game()
                 return
 
-        res = requests.post(f"{BASE_URL}/login",
-                            json={"username": username, "password": password}, timeout=3)
+            try:
+                msg = res.json().get("error", "Kļūda reģistrējoties!")
+            except Exception:
+                msg = "Kļūda reģistrējoties!"
+            reset_auth_input()
+            error_msg = msg
+            return
+
+        res = requests.post(
+            f"{BASE_URL}/login",
+            json={"username": username, "password": password},
+            timeout=3,
+        )
         if res.status_code == 200 and res.json().get("token"):
             token = res.json()["token"]
             remember_user(username, password)
             error_msg = ""
             start_new_game()
-        else:
-            reset_auth_input()
-            error_msg = "Nederīgs vārds vai parole!"
+            return
+
+        reset_auth_input()
+        error_msg = "Nederīgs vārds vai parole!"
+        return
 
     except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
-        # Serveris nav pieejams -> bezsaistes režīms, bet ar lokālu paroles pārbaudi
         if auth_action == 'register':
-            reset_auth_input()
-            error_msg = "Reģistrācijai vajadzīgs serveris!"
+            if _load_users().get(username) is not None:
+                if verify_local_user(username, password) is True:
+                    token = None
+                    offline_mode = True
+                    error_msg = ""
+                    start_new_game()
+                    return
+                reset_auth_input()
+                error_msg = "Lietotājs jau pastāv!"
+                return
+
+            remember_user(username, password)
+            token = None
+            offline_mode = True
+            error_msg = ""
+            start_new_game()
             return
 
         result = verify_local_user(username, password)
@@ -244,12 +281,16 @@ def do_auth():
             offline_mode = True
             error_msg = ""
             start_new_game()
-        elif result is False:
+            return
+        if result is False:
             reset_auth_input()
             error_msg = "Nederīgs vārds vai parole!"
-        else:
-            reset_auth_input()
-            error_msg = "Serveris nav pieejams, lietotājs nav saglabāts!"
+            return
+
+        reset_auth_input()
+        error_msg = "Serveris nav pieejams, lietotājs nav saglabāts!"
+        return
+
     except Exception:
         error_msg = "Kļūda pieslēdzoties!"
         input_step = 'username'
